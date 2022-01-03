@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import type { Readable } from 'svelte/store';
-import { getFirebaseContext } from './helpers';
+import { getFirebaseApp } from './helpers';
 import { startTrace, stopTrace } from './perf';
 import { getDownloadURL, getMetadata, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import type { FirebaseStorage, FullMetadata, StorageReference, UploadTask, UploadTaskSnapshot } from "firebase/storage";
@@ -28,7 +28,7 @@ export type DownloadDataStore = Readable<DownloadData> & {
 
 // Svelte Store for Storage file
 export function fileDownloadStore(path :string|StorageReference, opts :DownloadOpts) :DownloadDataStore {
-  const firebaseApp = getFirebaseContext();
+  const firebaseApp = getFirebaseApp();
   const storage = getStorage(firebaseApp);
 
   const { log, traceId, startWith, url, meta, } = { url: true, ...opts };
@@ -106,7 +106,7 @@ export type UploadDataStore = Readable<UploadTaskSnapshot> & {
 
 
 export function uploadTaskStore(path :string|StorageReference, file :any, opts :UploadOpts) :UploadDataStore {
-  const firebaseApp = getFirebaseContext();
+  const firebaseApp = getFirebaseApp();
   const storage = getStorage(firebaseApp);
 
   const { log, traceId } = { ...opts };

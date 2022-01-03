@@ -14,9 +14,8 @@
   "scripts": {
     "build": "vite build && npm run build:types",
     "build:types": "svelte-type-generator",
-    "dev": "vite",
-    "prepublishOnly": "npm build",
-    "serve": "vite preview",
+    "prepublishOnly": "npm run build",
+    "serve": "vite",
     "e2e": "cypress open --config watchForFileChanges=true",
     "emulate": "cd emulate && firebase emulators:start --only firestore",
     "test:watch": "concurrently \"npm:serve\" \"npm:emulate\" \"npm:e2e\" "

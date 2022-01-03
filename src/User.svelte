@@ -1,17 +1,17 @@
 <script lang="ts">
   export let persist :Storage = null;
   import { onMount, onDestroy, createEventDispatcher } from "svelte";
-import type { Unsubscriber } from "svelte/store";
-  import { userStore } from "./auth";
+  import type { Unsubscriber } from "svelte/store";
+  import { initUserStore, user } from "./auth";
 
-  let store = userStore({ persist });
+  initUserStore({ persist });
 
   const dispatch = createEventDispatcher();
   let unsub :Unsubscriber;
   onMount(() => {
-    unsub = store.subscribe(user => {
+    unsub = user.subscribe(u => {
       dispatch("user", {
-        user
+        u
       });
     });
   });
@@ -20,8 +20,8 @@ import type { Unsubscriber } from "svelte/store";
 </script>
 
 <slot name="before" />
-{#if $store}
-  <slot user={$store} auth={store.auth} />
+{#if $user}
+  <slot user={$user} auth={user.auth} />
 {:else}
   <slot name="signed-out" />
 {/if}

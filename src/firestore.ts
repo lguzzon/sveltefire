@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import type { Readable } from 'svelte/store';
-import { getFirebaseContext } from './helpers';
+import { getFirebaseApp } from './helpers';
 import { CollectionReference, doc, DocumentReference, Firestore, getDocs, getFirestore, query, QuerySnapshot } from 'firebase/firestore';
 import type { DocumentData, QueryConstraint } from 'firebase/firestore';
 import { onSnapshot, collection } from 'firebase/firestore';
@@ -42,7 +42,7 @@ const defaultDocumentOpts :DocumentOpts = {
 
 // Svelte Store for Firestore Document
 export function docStore(path :string|DocumentReference, opts :DocumentOpts) {
-  const firebase = getFirebaseContext();
+  const firebase = getFirebaseApp();
   const firestore = getFirestore(firebase);
 
   const { startWith, log, traceId, maxWait, once } = { ...defaultDocumentOpts, ...opts };
@@ -151,7 +151,7 @@ export type QueryFunction = (ref: CollectionReference)=>QueryConstraint|QueryCon
 
 // Svelte Store for Firestore Collection
 export function collectionStore(path :string|CollectionReference, queryFn :QueryFunction, opts :CollectionOpts) :CollectionDataStore {
-  const firebase = getFirebaseContext();
+  const firebase = getFirebaseApp();
   const firestore = getFirestore(firebase);
 
   const { startWith, log, traceId, maxWait, once, idField, refField } = {
