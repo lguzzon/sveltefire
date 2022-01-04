@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { FullMetadata, StorageReference } from "firebase/storage";
+
   import { onDestroy, onMount, createEventDispatcher } from "svelte";
   import type { Unsubscriber } from "svelte/store";
   import { DownloadOpts, fileDownloadStore } from "./storage";
@@ -20,7 +22,10 @@
 
   let store = fileDownloadStore(path, opts);
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    ref:{ref:StorageReference},
+    storageResult:{downloadURL: string, metadata: FullMetadata}
+  }>();
 
   let unsub :Unsubscriber;
 

@@ -1,18 +1,18 @@
 <script lang="ts">
-  export let persist :Storage = null;
+  import type { User } from "firebase/auth";
   import { onMount, onDestroy, createEventDispatcher } from "svelte";
   import type { Unsubscriber } from "svelte/store";
   import { initUserStore, user } from "./auth";
 
+  export let persist :Storage = null;
+
   initUserStore({ persist });
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{user:{user:User}}>();
   let unsub :Unsubscriber;
   onMount(() => {
     unsub = user.subscribe(u => {
-      dispatch("user", {
-        u
-      });
+      dispatch("user", {user:u});
     });
   });
 

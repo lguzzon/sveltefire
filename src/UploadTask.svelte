@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { StorageReference } from "firebase/storage";
+import type { StorageReference, UploadTaskSnapshot } from "firebase/storage";
 
   import { onDestroy, onMount, createEventDispatcher } from "svelte";
   import type { Unsubscriber } from "svelte/store";
@@ -17,7 +17,10 @@ import type { StorageReference } from "firebase/storage";
 
   let store = uploadTaskStore(path, file, opts);
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    ref:{ref:StorageReference},
+    snapshot:{snapshot:UploadTaskSnapshot}
+  }>();
 
   let unsub :Unsubscriber;
 

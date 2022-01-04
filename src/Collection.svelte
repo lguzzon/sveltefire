@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { CollectionReference } from "firebase/firestore";
+  import type { CollectionReference, DocumentData } from "firebase/firestore";
   import { onDestroy, onMount, createEventDispatcher } from "svelte";
   import type { Unsubscriber } from "svelte/store";
   import { CollectionOpts, collectionStore, QueryFunction } from "./firestore";
@@ -22,7 +22,10 @@
 
   let store = collectionStore(path, query, opts);
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    ref:{ref:CollectionReference},
+    data:{data:DocumentData[]}
+  }>();
 
   let unsub :Unsubscriber;
 
@@ -35,9 +38,7 @@
     }
 
     unsub = store.subscribe(data => {
-      dispatch("data", {
-        data
-      });
+      dispatch("data", { data });
     });
   }
 

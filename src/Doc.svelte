@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { DocumentReference } from "firebase/firestore";
+  import type { DocumentData, DocumentReference } from "firebase/firestore";
   import type { Unsubscriber } from "svelte/store";
   import { onDestroy, onMount, createEventDispatcher } from "svelte";
   import { docStore, DocumentOpts } from "./firestore";
@@ -21,7 +21,10 @@
 
   let store = docStore(path, opts);
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    ref:{ref:DocumentReference},
+    data:DocumentData
+  }>();
 
   let unsub :Unsubscriber;
 
@@ -31,13 +34,11 @@
       // Unsub and create new store
       unsub();
       store = docStore(path, opts);
-      dispatch("ref", { ref: store.ref });
+      dispatch<"ref">("ref", { ref: store.ref } as {ref:DocumentReference});
     }
 
     unsub = store.subscribe(data => {
-      dispatch("data", {
-        data
-      });
+      dispatch<"data">("data", { data });
     });
   }
 
