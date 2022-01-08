@@ -23,7 +23,7 @@
 
   const dispatch = createEventDispatcher<{
     ref:{ref:DocumentReference},
-    data:DocumentData
+    data:{data:DocumentData}
   }>();
 
   let unsub :Unsubscriber;
