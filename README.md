@@ -273,6 +273,7 @@ Props:
 
 Slots: 
 
+- *loading* shown while Firebase is checking whether a user is signed-in or not
 - *default slot* shown to signed-in user
 - *signed-out* shown to signed-out user
 
@@ -283,9 +284,10 @@ Slot Props & Events:
 
 ```html
 <User persist={sessionStorage} let:user={user} let:auth={auth} on:user>
-    {user.uid}
+    Hello {user.uid}
 
-    <div slot="signed-out"></div>
+    <div slot="signed-out">No user, please login</div>
+    <div slot="loading">Waiting for firebase</div>
 </User>
 ```
 

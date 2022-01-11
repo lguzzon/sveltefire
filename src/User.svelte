@@ -22,6 +22,8 @@
 <slot name="before" />
 {#if $user}
   <slot user={$user} auth={user.auth} />
+{:else if $user === undefined}
+  <slot name="loading" />
 {:else}
   <slot name="signed-out" />
 {/if}
