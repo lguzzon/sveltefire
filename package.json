@@ -26,21 +26,21 @@
     "src"
   ],
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.9",
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.34",
     "@testing-library/svelte": "^3.0.3",
-    "concurrently": "^6.5.1",
-    "cypress": "^9.2.0",
+    "concurrently": "^7.0.0",
+    "cypress": "^9.2.1",
     "firebase-tools": "^10.0.1",
-    "postcss": "^8.2.13",
-    "postcss-load-config": "^3.0.1",
-    "svelte": "^3.38.1",
-    "svelte-hmr": "^0.14.3",
+    "postcss": "^8.4.5",
+    "postcss-load-config": "^3.1.1",
+    "svelte": "^3.45.0",
+    "svelte-hmr": "^0.14.9",
     "svelte-htm": "^1.1.1",
-    "svelte-preprocess": "^4.7.2",
+    "svelte-preprocess": "^4.10.1",
     "svelte-type-generator": "^1.1.0",
-    "typescript": "^4.2.4",
-    "vite": "^2.2.3",
-    "vite-web-test-runner-plugin": "^0.0.3"
+    "typescript": "^4.5.4",
+    "vite": "^2.7.10",
+    "vite-web-test-runner-plugin": "^0.1.0"
   },
   "peerDependencies": {
     "firebase": "^9.0.0"
