@@ -1,27 +1,27 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher } from "svelte";
-  import { userStore } from "./auth";
+  import { onMount, onDestroy, createEventDispatcher } from 'svelte'
+  import { userStore } from './auth'
 
-  export let persist = null;
+  export let persist = null
 
-  let store = userStore({ persist });
+  const store = userStore({ persist })
 
-  const dispatch = createEventDispatcher();
-  let unsub;
+  const dispatch = createEventDispatcher()
+  let unsub
   onMount(() => {
     unsub = store.subscribe((user) => {
-      dispatch("user", {
-        user,
-      });
-    });
-  });
+      dispatch('user', {
+        user
+      })
+    })
+  })
 
-  onDestroy(() => unsub());
+  onDestroy(() => unsub())
 </script>
 
 <slot name="before" />
 {#if $store}
-  <slot user={$store} auth={store.auth} />
+  <slot user="{$store}" auth="{store.auth}" />
 {:else if $store === undefined}
   <slot name="loading" />
 {:else}

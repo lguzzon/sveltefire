@@ -10,19 +10,16 @@ import UploadTask from './UploadTask.svelte'
 import { getFirebaseApp } from './helpers'
 
 export {
+  Collection,
+  collectionStore,
+  Doc,
+  docStore,
+  fileDownloadStore,
   FirebaseApp,
   getFirebaseApp,
-  User,
-  Doc,
-  Collection,
-  /**
-    * @deprecated Use 'initUserStore' to provide configuration the use the 'user' store directly
-    */
-  userStore,
-  docStore,
-  collectionStore,
-  fileDownloadStore,
-  uploadTaskStore,
   StorageRef,
-  UploadTask
+  UploadTask,
+  uploadTaskStore,
+  User,
+  userStore
 }

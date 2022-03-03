@@ -1,52 +1,52 @@
 <script>
-  import { onDestroy, onMount, createEventDispatcher } from "svelte";
-  import { uploadTaskStore } from "./storage";
+  import { onDestroy, onMount, createEventDispatcher } from 'svelte'
+  import { uploadTaskStore } from './storage'
 
-  export let path;
-  export let file;
-  export let log = false;
-  export let traceId = "";
+  export let path
+  export let file
+  export let log = false
+  export let traceId = ''
 
   const opts = {
     traceId,
-    log,
-  };
+    log
+  }
 
-  let store = uploadTaskStore(path, file, opts);
+  let store = uploadTaskStore(path, file, opts)
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 
-  let unsub;
+  let unsub
 
   // Props changed
   $: {
     if (unsub) {
       // Unsub and create new store
-      unsub();
-      store = uploadTaskStore(path, file, opts);
-      dispatch("ref", { ref: store.ref });
+      unsub()
+      store = uploadTaskStore(path, file, opts)
+      dispatch('ref', { ref: store.ref })
     }
 
     unsub = store.subscribe((snapshot) => {
-      dispatch("snapshot", {
-        snapshot,
-      });
-    });
+      dispatch('snapshot', {
+        snapshot
+      })
+    })
   }
 
-  onMount(() => dispatch("ref", { ref: store.ref }));
-  onDestroy(() => unsub());
+  onMount(() => dispatch('ref', { ref: store.ref }))
+  onDestroy(() => unsub())
 </script>
 
 <slot name="before" />
 
 {#if $store}
   <slot
-    snapshot={$store}
-    ref={store.ref}
-    task={store.task}
-    downloadURL={store.downloadURL}
-    error={store.error}
+    snapshot="{$store}"
+    ref="{store.ref}"
+    task="{store.task}"
+    downloadURL="{store.downloadURL}"
+    error="{store.error}"
   />
 {:else}
   <slot name="fallback" />

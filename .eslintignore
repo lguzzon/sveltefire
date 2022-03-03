@@ -1,0 +1,22 @@
+node_modules
+package-lock.json
+
+www/
+TEMPs/
+
+
+# Cordova
+cordova/platforms/
+cordova/plugins/
+cordova/www/
+
+#Static src
+src/static/PDFJS/
+
+cypress/
+docs/
+build/
+dist/
+example/
+spec/
+README.md

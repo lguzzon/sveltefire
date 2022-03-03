@@ -1,17 +1,23 @@
 import { writable } from 'svelte/store'
 import { getFirebaseApp } from './helpers'
 import { startTrace, stopTrace } from './perf'
-import { getDownloadURL, getMetadata, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
+import {
+  getDownloadURL,
+  getMetadata,
+  getStorage,
+  ref,
+  uploadBytesResumable
+} from 'firebase/storage'
 // Svelte Store for Storage file
 export function fileDownloadStore (path, opts) {
   const firebaseApp = getFirebaseApp()
   const storage = getStorage(firebaseApp)
-  const { log, traceId, startWith, url, meta } = { url: true, ...opts }
+  const { traceId, startWith, url, meta } = { url: true, ...opts }
   const fref = typeof path === 'string' ? ref(storage, path) : path
   // Performance trace
   const trace = traceId && startTrace(traceId)
   // Internal state
-  let _loading = typeof startWith !== undefined
+  let _loading = typeof startWith !== 'undefined'
   let _error = null
   // State should never change without emitting a new value
   // Clears loading state on first call
@@ -27,12 +33,14 @@ export function fileDownloadStore (path, opts) {
   const start = () => {
     const requests = [url && getDownloadURL(fref), meta && getMetadata(fref)]
     Promise.all(requests)
-      .then(result => next({
-        url: result[0],
-        metadata: result[1]
-      }))
-      .catch(e => next(null, e))
-    return () => { }
+      .then((result) =>
+        next({
+          url: result[0],
+          metadata: result[1]
+        })
+      )
+      .catch((e) => next(null, e))
+    return () => {}
   }
   // Svelte store
   const store = writable(startWith, start)
@@ -71,11 +79,15 @@ export function uploadTaskStore (path, file, opts) {
       next: (snap) => next(snap),
       error: (e) => next(_task.snapshot, e),
       complete: () => {
-        console.log('done')
-        getDownloadURL(fref).then(url => {
+        if (log) {
+          console.log('done')
+        }
+        getDownloadURL(fref).then((url) => {
           next(_task.snapshot)
           _url = url
-          if (log) { console.log(`Upload Complete: ${url}`) }
+          if (log) {
+            console.log(`Upload Complete: ${url}`)
+          }
           trace && stopTrace(trace)
         })
       }

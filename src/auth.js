@@ -11,11 +11,13 @@ export function userStore (opts = { persist: null }) {
     cached = JSON.parse(opts.persist.getItem(storageKey))
   }
   const store = writable(cached, () => {
-    const teardown = onAuthStateChanged(auth, u => {
+    const teardown = onAuthStateChanged(auth, (u) => {
       set(u)
       persist && opts.persist.setItem(storageKey, JSON.stringify(u))
     })
-    return () => { teardown() }
+    return () => {
+      teardown()
+    }
   })
   const { subscribe, set } = store
   return {

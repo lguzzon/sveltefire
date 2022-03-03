@@ -12,10 +12,7 @@ export default defineConfig({
   plugins: [svelte()],
   build: {
     rollupOptions: {
-      external: [
-        /^@?firebase.*$/,
-        /^@?svelte.*$/
-      ]
+      external: [/^@?firebase.*$/, /^@?svelte.*$/]
     },
     lib: {
       entry: path.resolve(__dirname, 'src/index.js'),

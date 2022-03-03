@@ -1,0 +1,14 @@
+node_modules
+package-lock.json
+pnpm-lock.yaml
+
+www/
+
+# Cordova
+cordova/platforms/
+cordova/plugins/
+cordova/www/
+
+src/static/PDFJS
+
+TEMPs/

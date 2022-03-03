@@ -1,52 +1,52 @@
 <script>
-  import { onDestroy, onMount, createEventDispatcher } from "svelte";
-  import { docStore } from "./firestore";
+  import { onDestroy, onMount, createEventDispatcher } from 'svelte'
+  import { docStore } from './firestore'
 
-  export let path;
-  export let log = false;
-  export let traceId = "";
-  export let startWith = undefined; // Why? Firestore returns null for docs that don't exist, predictible loading state.
-  export let maxWait = 10000;
-  export let once = false;
+  export let path
+  export let log = false
+  export let traceId = ''
+  export let startWith // Why? Firestore returns null for docs that don't exist, predictible loading state.
+  export let maxWait = 10000
+  export let once = false
 
   const opts = {
     startWith,
     traceId,
     log,
     maxWait,
-    once,
-  };
+    once
+  }
 
-  let store = docStore(path, opts);
+  let store = docStore(path, opts)
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 
-  let unsub;
+  let unsub
 
   // Props changed
   $: {
     if (unsub) {
       // Unsub and create new store
-      unsub();
-      store = docStore(path, opts);
-      dispatch("ref", { ref: store.ref });
+      unsub()
+      store = docStore(path, opts)
+      dispatch('ref', { ref: store.ref })
     }
 
     unsub = store.subscribe((data) => {
-      dispatch("data", {
-        data,
-      });
-    });
+      dispatch('data', {
+        data
+      })
+    })
   }
 
-  onMount(() => dispatch("ref", { ref: store.ref }));
-  onDestroy(() => unsub());
+  onMount(() => dispatch('ref', { ref: store.ref }))
+  onDestroy(() => unsub())
 </script>
 
 <slot name="before" />
 
 {#if $store}
-  <slot data={$store} ref={store.ref} error={store.error} />
+  <slot data="{$store}" ref="{store.ref}" error="{store.error}" />
 {:else if store.loading}
   <slot name="loading" />
 {:else}
