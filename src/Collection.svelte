@@ -1,18 +1,18 @@
-<script lang="ts">
-  import type { CollectionReference, DocumentData } from "firebase/firestore";
+<script>
   import { onDestroy, onMount, createEventDispatcher } from "svelte";
-  import type { Unsubscriber } from "svelte/store";
-  import { CollectionOpts, collectionStore, QueryFunction } from "./firestore";
-
-  export let path :string|CollectionReference;
-  export let query :QueryFunction = null;
+  import { collectionStore } from "./firestore";
+  
+  export let path;
+  export let query = null;
   export let traceId = "";
   export let log = false;
   export let startWith = undefined;
   export let maxWait = 10000;
   export let once = false;
 
-  const opts :CollectionOpts = {
+
+
+  const opts = {
     startWith,
     traceId,
     log,
@@ -22,12 +22,9 @@
 
   let store = collectionStore(path, query, opts);
 
-  const dispatch = createEventDispatcher<{
-    ref:{ref:CollectionReference},
-    data:{data:DocumentData[]}
-  }>();
+  const dispatch = createEventDispatcher();
 
-  let unsub :Unsubscriber;
+  let unsub;
 
   // Props changed
   $: {
@@ -38,7 +35,9 @@
     }
 
     unsub = store.subscribe(data => {
-      dispatch("data", { data });
+      dispatch("data", {
+        data
+      });
     });
   }
 

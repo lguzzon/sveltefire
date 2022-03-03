@@ -1,28 +1,22 @@
-<script lang="ts">
-import type { StorageReference, UploadTaskSnapshot } from "firebase/storage";
-
+<script>
   import { onDestroy, onMount, createEventDispatcher } from "svelte";
-  import type { Unsubscriber } from "svelte/store";
-  import { UploadOpts, uploadTaskStore } from "./storage";
+  import { uploadTaskStore } from "./storage";
 
-  export let path :string|StorageReference;
-  export let file :any;
+  export let path;
+  export let file;
   export let log = false;
   export let traceId = "";
 
-  const opts :UploadOpts = {
+  const opts = {
     traceId,
     log,
-  }
+  };
 
   let store = uploadTaskStore(path, file, opts);
 
-  const dispatch = createEventDispatcher<{
-    ref:{ref:StorageReference},
-    snapshot:{snapshot:UploadTaskSnapshot}
-  }>();
+  const dispatch = createEventDispatcher();
 
-  let unsub :Unsubscriber;
+  let unsub;
 
   // Props changed
   $: {
@@ -33,26 +27,27 @@ import type { StorageReference, UploadTaskSnapshot } from "firebase/storage";
       dispatch("ref", { ref: store.ref });
     }
 
-    unsub = store.subscribe(snapshot => {
+    unsub = store.subscribe((snapshot) => {
       dispatch("snapshot", {
-        snapshot
+        snapshot,
       });
     });
   }
 
-  onMount(() => dispatch("ref", { ref: store.ref }))
+  onMount(() => dispatch("ref", { ref: store.ref }));
   onDestroy(() => unsub());
 </script>
 
 <slot name="before" />
 
 {#if $store}
-  <slot 
-    snapshot={$store} 
-    ref={store.ref} 
+  <slot
+    snapshot={$store}
+    ref={store.ref}
     task={store.task}
-    downloadURL={store.downloadURL} 
-    error={store.error} />
+    downloadURL={store.downloadURL}
+    error={store.error}
+  />
 {:else}
   <slot name="fallback" />
 {/if}

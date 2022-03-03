@@ -1,32 +1,27 @@
-<script lang="ts">
-  import type { DocumentData, DocumentReference } from "firebase/firestore";
-  import type { Unsubscriber } from "svelte/store";
+<script>
   import { onDestroy, onMount, createEventDispatcher } from "svelte";
-  import { docStore, DocumentOpts } from "./firestore";
+  import { docStore } from "./firestore";
 
-  export let path :string|DocumentReference;
+  export let path;
   export let log = false;
   export let traceId = "";
   export let startWith = undefined; // Why? Firestore returns null for docs that don't exist, predictible loading state.
   export let maxWait = 10000;
   export let once = false;
 
-  const opts :DocumentOpts = {
+  const opts = {
     startWith,
     traceId,
     log,
     maxWait,
-    once
-  }
+    once,
+  };
 
   let store = docStore(path, opts);
 
-  const dispatch = createEventDispatcher<{
-    ref:{ref:DocumentReference},
-    data:{data:DocumentData}
-  }>();
+  const dispatch = createEventDispatcher();
 
-  let unsub :Unsubscriber;
+  let unsub;
 
   // Props changed
   $: {
@@ -34,15 +29,17 @@
       // Unsub and create new store
       unsub();
       store = docStore(path, opts);
-      dispatch<"ref">("ref", { ref: store.ref } as {ref:DocumentReference});
+      dispatch("ref", { ref: store.ref });
     }
 
-    unsub = store.subscribe(data => {
-      dispatch<"data">("data", { data });
+    unsub = store.subscribe((data) => {
+      dispatch("data", {
+        data,
+      });
     });
   }
 
-  onMount(() => dispatch("ref", { ref: store.ref }))
+  onMount(() => dispatch("ref", { ref: store.ref }));
   onDestroy(() => unsub());
 </script>
 

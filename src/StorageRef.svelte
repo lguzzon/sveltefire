@@ -1,9 +1,6 @@
-<script lang="ts">
-  import type { FullMetadata, StorageReference } from "firebase/storage";
-
+<script>
   import { onDestroy, onMount, createEventDispatcher } from "svelte";
-  import type { Unsubscriber } from "svelte/store";
-  import { DownloadOpts, fileDownloadStore } from "./storage";
+  import { fileDownloadStore } from "./storage";
 
   export let path = "";
   export let log = false;
@@ -12,7 +9,7 @@
   export let url = true;
   export let meta = false;
 
-  const opts :DownloadOpts = {
+  const opts = {
     startWith,
     traceId,
     log,
@@ -22,12 +19,9 @@
 
   let store = fileDownloadStore(path, opts);
 
-  const dispatch = createEventDispatcher<{
-    ref:{ref:StorageReference},
-    storageResult:{downloadURL: string, metadata: FullMetadata}
-  }>();
+  const dispatch = createEventDispatcher();
 
-  let unsub :Unsubscriber;
+  let unsub;
 
   // Props changed
   $: {
@@ -38,14 +32,13 @@
       dispatch("ref", { ref: store.ref });
     }
 
-    unsub = store.subscribe(result => {
-     if (result) {
-      dispatch("storageResult", {
-        downloadURL: result.url,
-        metadata: result.metadata,
-      });
-     }
-
+    unsub = store.subscribe((result) => {
+      if (result) {
+        dispatch("storageResult", {
+          downloadURL: result.url,
+          metadata: result.metadata,
+        });
+      }
     });
   }
 
@@ -60,7 +53,8 @@
     downloadURL={$store && $store.url}
     metadata={$store && $store.metadata}
     ref={store.ref}
-    error={store.error} />
+    error={store.error}
+  />
 {:else if store.loading}
   <slot name="loading" />
 {:else}

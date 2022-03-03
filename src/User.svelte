@@ -1,18 +1,18 @@
-<script lang="ts">
-  import type { User } from "firebase/auth";
+<script>
   import { onMount, onDestroy, createEventDispatcher } from "svelte";
-  import type { Unsubscriber } from "svelte/store";
-  import { initUserStore, user } from "./auth";
+  import { userStore } from "./auth";
 
-  export let persist :Storage = null;
+  export let persist = null;
 
-  initUserStore({ persist });
+  let store = userStore({ persist });
 
-  const dispatch = createEventDispatcher<{user:{user:User}}>();
-  let unsub :Unsubscriber;
+  const dispatch = createEventDispatcher();
+  let unsub;
   onMount(() => {
-    unsub = user.subscribe(u => {
-      dispatch("user", {user:u});
+    unsub = store.subscribe((user) => {
+      dispatch("user", {
+        user,
+      });
     });
   });
 
@@ -20,9 +20,9 @@
 </script>
 
 <slot name="before" />
-{#if $user}
-  <slot user={$user} auth={user.auth} />
-{:else if $user === undefined}
+{#if $store}
+  <slot user={$store} auth={store.auth} />
+{:else if $store === undefined}
   <slot name="loading" />
 {:else}
   <slot name="signed-out" />

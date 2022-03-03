@@ -1,10 +1,10 @@
-<script lang="ts">
+<script>
   import { onMount, setContext, createEventDispatcher } from "svelte";
-  import { FirebaseApp, FirebaseOptions, initializeApp } from "firebase/app";
+  import { initializeApp } from "firebase/app";
   import { initializePerformance } from "firebase/performance";
   import { initializeAnalytics } from "firebase/analytics";
-  export let firebase :FirebaseApp = null;
-  export let config :FirebaseOptions = null;
+  export let firebase = null;
+  export let config = null;
   export let perf = false;
   export let analytics = false;
 
@@ -27,7 +27,7 @@
       firebase = initializeApp(config);
     }
     // Set firebase context from window if needed
-    firebase = firebase || (window && ((window as any)['firebaseApp'] as FirebaseApp));
+    firebase = firebase || (window && window.firebase);
 
     if (!firebase) {
       throw Error(
